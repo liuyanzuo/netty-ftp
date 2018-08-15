@@ -1,0 +1,9 @@
+#IDEA#
+**/.idea/
+**/*.iml
+**/output/
+#MAVEN#
+**/target/
+#Eclipse#
+**/.classpath/
+**/bin/
