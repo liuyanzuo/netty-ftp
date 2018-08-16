@@ -30,6 +30,11 @@ public class StateHolder {
         tmp.setExtData(data);
     }
 
+    public static void updateState(int futureState,String remoteAddress){
+        SessionStateMachine tmp = connStateMap.get(remoteAddress);
+        tmp.setState(futureState);
+    }
+
     public static Object getData(String remoteAddress) {
         SessionStateMachine tmp = connStateMap.get(remoteAddress);
         return tmp.getExtData();

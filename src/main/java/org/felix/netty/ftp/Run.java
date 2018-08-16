@@ -1,7 +1,8 @@
 package org.felix.netty.ftp;
 
-import org.felix.netty.ftp.tools.ConfigTool;
-import org.felix.netty.ftp.tools.ServerConfig;
+import org.felix.netty.ftp.domain.UserPermissionService;
+import org.felix.netty.ftp.utils.ConfigTool;
+import org.felix.netty.ftp.utils.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +20,8 @@ public class Run {
             configPath = args[0];
         }
         try {
-            ServerConfig serverConfig = ConfigTool.loadConfig(configPath);
-            new FTPServer(serverConfig).start();
+            ConfigTool.loadConfig(configPath);
+            new FTPServer().start();
         } catch (IOException e) {
             LOG.error("[can't load config]");
         }

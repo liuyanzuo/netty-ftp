@@ -9,14 +9,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
-import org.felix.netty.ftp.tools.ConfigTool;
-import org.felix.netty.ftp.tools.ServerConfig;
+import org.felix.netty.ftp.inhandler.ActiveReplyHandler;
+import org.felix.netty.ftp.inhandler.CommandSplitHandler;
+import org.felix.netty.ftp.inhandler.LoginHandler;
+import org.felix.netty.ftp.outhandler.LineDelimiterOutHandler;
+import org.felix.netty.ftp.utils.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
-import static org.felix.netty.ftp.tools.ServerConfig.DEFAULT_CONFIG_PATH;
+import static org.felix.netty.ftp.utils.Tools.MAX_CMD_LEN;
 
 /**
  * FTP服务器的启动入口
@@ -28,14 +29,8 @@ public class FTPServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(FTPServer.class);
 
-    private ServerConfig serverConfig;
-
-    public FTPServer(ServerConfig serverConfig) {
-        this.serverConfig = serverConfig;
-    }
-
     public void start() {
-        LOG.info("[FTP Server]-[control listener-{}:{}]", serverConfig.getControlServerAddress(), serverConfig.getControlServerPort());
+        LOG.info("[FTP Server]-[control listener-{}:{}]", ServerConfig.getControlServerAddress(), ServerConfig.getControlServerPort());
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup ioGroup = new NioEventLoopGroup();
         try {
@@ -46,10 +41,14 @@ public class FTPServer {
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
-
+                            ch.pipeline().addLast(new LineDelimiterOutHandler());
+                            ch.pipeline().addLast(new LineBasedFrameDecoder(MAX_CMD_LEN));//resolve half package and split package
+                            ch.pipeline().addLast(new ActiveReplyHandler());//active and inactive
+                            ch.pipeline().addLast(new CommandSplitHandler());//ByteBuf -> Ftp message
+                            ch.pipeline().addLast(new LoginHandler());
                         }
                     });
-            ChannelFuture future = server.bind(serverConfig.getControlServerAddress(), serverConfig.getControlServerPort()).sync();
+            ChannelFuture future = server.bind(ServerConfig.getControlServerAddress(), ServerConfig.getControlServerPort()).sync();
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             LOG.error("[FTP Server Error]", e);
