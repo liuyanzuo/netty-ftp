@@ -20,6 +20,14 @@
             <version>${netty.version}</version>
         </dependency>
 
+        <!--Tool start-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+        </dependency>
+        <!--Tool end-->
+
         <!--Log start-->
         <dependency>
             <groupId>log4j</groupId>
