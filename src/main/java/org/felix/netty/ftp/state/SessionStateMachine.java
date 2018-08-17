@@ -51,7 +51,12 @@ public class SessionStateMachine {
         return state;
     }
 
-    public void setState(int futureState) {
+    /**
+     * 状态机状态更新
+     * 采用同步锁
+     * @param futureState 将要更新的状态
+     */
+    public synchronized void setState(int futureState) {
         Boolean rule = STATE_RULE_TABLE.get(state, futureState);
         if (Objects.isNull(rule) || !rule.booleanValue()) {
             throw new StateChangeNotAllowedException("state change not allowed", state, futureState);

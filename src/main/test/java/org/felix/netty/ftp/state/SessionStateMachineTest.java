@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.Inet4Address;
+
 import static org.felix.netty.ftp.state.SessionStateMachine.CONNECTED;
 import static org.felix.netty.ftp.state.SessionStateMachine.USER_NAME_READY;
 
