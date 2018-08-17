@@ -10,4 +10,6 @@ public class CommandConstants {
 
     public static final String PORT = "PORT";
 
+    public static final String NLST = "NLST";
+
 }

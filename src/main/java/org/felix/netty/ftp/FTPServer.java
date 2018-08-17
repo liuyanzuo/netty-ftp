@@ -9,6 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
+import org.felix.netty.ftp.domain.NLISTService;
 import org.felix.netty.ftp.domain.PortService;
 import org.felix.netty.ftp.inhandler.ActiveReplyHandler;
 import org.felix.netty.ftp.inhandler.CommandDispatchHandler;
@@ -38,6 +39,7 @@ public class FTPServer {
         try {
 
             new PortService().init();
+            new NLISTService().init();
             ServerBootstrap server = new ServerBootstrap();
             server.group(bossGroup, ioGroup)
                     .channel(NioServerSocketChannel.class)

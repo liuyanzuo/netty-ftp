@@ -1,6 +1,8 @@
 package org.felix.netty.ftp.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
@@ -27,6 +29,11 @@ public class ConfigTool {
         ServerConfig.setControlServerAddress((String) config.getOrDefault(CONTROL_SERVER_ADDRESS, DEFAULT_CONTROL_SERVER_ADDRESS));
         ServerConfig.setControlServerPort(Integer.valueOf((String) config.getOrDefault(CONTROL_SERVER_PORT, DEFAULT_CONTROL_SERVER_PORT)));
         ServerConfig.setIsAnonymousAllowed(Boolean.valueOf((String) config.getOrDefault(IS_ANONYMOUS, DEFAULT_IS_ANONYMOUS)));
+        ServerConfig.setRootDir((String) config.getOrDefault(ROOT_DIR,DEFAULT_ROOT_DIR));
+        //check file is exists
+        if(!new File(ServerConfig.getRootDir()).exists()){
+            throw new FileNotFoundException("ftp root file is not exists");
+        }
         String serverWhiteList = config.getProperty(SERVER_WHITE_LIST);
         if (Objects.isNull(serverWhiteList)) {
             ServerConfig.setWhiteList(new HashSet<>());

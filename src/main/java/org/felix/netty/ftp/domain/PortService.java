@@ -7,12 +7,15 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.felix.netty.ftp.inhandler.CommandDispatchHandler;
 import org.felix.netty.ftp.inhandler.InboundHandlerContext;
+import org.felix.netty.ftp.state.FTPSession;
 import org.felix.netty.ftp.state.SessionHolder;
 import org.felix.netty.ftp.state.SessionId;
 import org.felix.netty.ftp.utils.CommandConstants;
 import org.felix.netty.ftp.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 import static org.felix.netty.ftp.state.SessionStateMachine.READY_TRANSFORM;
 import static org.felix.netty.ftp.utils.RetEnum.PORT_OK;
@@ -55,6 +58,7 @@ public class PortService implements IFTPCommandService {
         }
     }
 
+    //TODO:优化此处线程开销
     private void connectToClient(String remoteAddress, int port, SessionId sessionId) throws InterruptedException {
         Bootstrap bootstrap = new Bootstrap();
         ChannelFuture sync = bootstrap.group(eventLoopGroup)
@@ -67,7 +71,11 @@ public class PortService implements IFTPCommandService {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                 //change state and save ChannelCtx
-                                SessionHolder.updateSessionState(sessionId, READY_TRANSFORM, ctx);
+                                Optional<FTPSession> sessionOp = SessionHolder.getSession(sessionId);
+                                if (sessionOp.isPresent()) {
+                                    FTPSession session = sessionOp.get();
+                                    session.setDataChannel(ctx);
+                                }
                             }
                         });
                     }

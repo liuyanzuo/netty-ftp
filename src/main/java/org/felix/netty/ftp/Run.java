@@ -22,7 +22,7 @@ public class Run {
             ConfigTool.loadConfig(configPath);
             new FTPServer().start();
         } catch (IOException e) {
-            LOG.error("[can't load config]");
+            LOG.error("[can't load config]-[{}]",e.getMessage());
         }
     }
 

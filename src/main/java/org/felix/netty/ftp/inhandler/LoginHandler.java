@@ -9,10 +9,12 @@ import org.felix.netty.ftp.state.SessionHolder;
 import org.felix.netty.ftp.state.SessionId;
 import org.felix.netty.ftp.state.SessionStateMachine;
 import org.felix.netty.ftp.utils.RetEnum;
+import org.felix.netty.ftp.utils.ServerConfig;
 import org.felix.netty.ftp.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -66,7 +68,9 @@ public class LoginHandler extends ChannelInboundHandlerAdapter {
             String userName = (String) extData;
             //password validation
             if (UserPermissionService.checkLogged(userName, command.getParam())) {
-                SessionHolder.updateSessionState(sessionId,USER_LOGGED);
+                SessionHolder.updateSessionState(sessionId, USER_LOGGED);
+                File rootFile = new File(ServerConfig.getRootDir());
+                session.setPresentFile(rootFile);
                 ctx.write(Tools.enumToMessageString(RetEnum.USER_LOGGED));
                 return;
             }

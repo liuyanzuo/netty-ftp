@@ -21,6 +21,10 @@ public class ServerConfig {
 
     public static final String IS_ANONYMOUS = "anonymous";
 
+    public static final String ROOT_DIR = "root.dir";
+
+    public static final String DEFAULT_ROOT_DIR = ".";
+
     public static final boolean DEFAULT_IS_ANONYMOUS = false;
 
     public static final String DEFAULT_CONFIG_PATH = "default.properties";
@@ -44,6 +48,11 @@ public class ServerConfig {
      * 白名单
      */
     private static Set<String> whiteList;
+
+    /**
+     * FTP根目录
+     */
+    private static String rootDir;
 
     public static String getControlServerAddress() {
         return controlServerAddress;
@@ -75,5 +84,13 @@ public class ServerConfig {
 
     public static void setWhiteList(Set<String> whiteList) {
         ServerConfig.whiteList = whiteList;
+    }
+
+    public static String getRootDir() {
+        return rootDir;
+    }
+
+    public static void setRootDir(String rootDir) {
+        ServerConfig.rootDir = rootDir;
     }
 }
