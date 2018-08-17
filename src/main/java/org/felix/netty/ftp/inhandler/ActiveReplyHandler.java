@@ -25,6 +25,7 @@ public class ActiveReplyHandler extends ChannelInboundHandlerAdapter {
         SocketAddress socketAddress = ctx.channel().remoteAddress();
         InetSocketAddress inetSocketAddress = (InetSocketAddress) socketAddress;
         String remoteAddress = inetSocketAddress.getAddress().toString();
+        remoteAddress = Tools.fixIpAddressFormat(remoteAddress);
         int remotePort = inetSocketAddress.getPort();
 
         LOG.info("[New channel]-[Address:{}:{}]", remoteAddress,remotePort);

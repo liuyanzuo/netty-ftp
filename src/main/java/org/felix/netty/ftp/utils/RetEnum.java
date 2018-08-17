@@ -2,6 +2,7 @@ package org.felix.netty.ftp.utils;
 
 public enum RetEnum {
     CONN_SUCCESS_WC("220", "Power by HeiFengRen,V1.0"),
+    PORT_OK("200", "Port is ok"),
     USER_LOGGED("230", "User logged"),
     USER_NOT_IDENTIFY("332", "Need user name"),
     UNIDENTIFY_CONNECTION("521", "Connection not exists,close 2 second later"),

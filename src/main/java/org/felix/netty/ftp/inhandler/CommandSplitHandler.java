@@ -33,6 +33,7 @@ public class CommandSplitHandler extends ChannelInboundHandlerAdapter {
         SocketAddress socketAddress = ctx.channel().remoteAddress();
         InetSocketAddress inetSocketAddress = (InetSocketAddress) socketAddress;
         String remoteAddress = inetSocketAddress.getAddress().toString();
+        remoteAddress = Tools.fixIpAddressFormat(remoteAddress);
         int remotePort = inetSocketAddress.getPort();
         SessionId sessionId = new SessionId(remoteAddress, remotePort);
         context.setSessionId(sessionId);

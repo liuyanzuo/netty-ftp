@@ -68,4 +68,11 @@ public class Tools {
         return socketAddress.toString();
     }
 
+    public static String fixIpAddressFormat(String address){
+        if (address.startsWith("/")) {
+            return address.substring(1, address.length());
+        }
+        return address;
+    }
+
 }

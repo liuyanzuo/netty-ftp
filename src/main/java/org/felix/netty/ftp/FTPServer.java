@@ -9,7 +9,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
+import org.felix.netty.ftp.domain.PortService;
 import org.felix.netty.ftp.inhandler.ActiveReplyHandler;
+import org.felix.netty.ftp.inhandler.CommandDispatchHandler;
 import org.felix.netty.ftp.inhandler.CommandSplitHandler;
 import org.felix.netty.ftp.inhandler.LoginHandler;
 import org.felix.netty.ftp.outhandler.LineDelimiterOutHandler;
@@ -34,6 +36,8 @@ public class FTPServer {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup ioGroup = new NioEventLoopGroup();
         try {
+
+            new PortService().init();
             ServerBootstrap server = new ServerBootstrap();
             server.group(bossGroup, ioGroup)
                     .channel(NioServerSocketChannel.class)
@@ -46,6 +50,7 @@ public class FTPServer {
                             ch.pipeline().addLast(new ActiveReplyHandler());//active and inactive
                             ch.pipeline().addLast(new CommandSplitHandler());//ByteBuf -> Ftp message
                             ch.pipeline().addLast(new LoginHandler());
+                            ch.pipeline().addLast(new CommandDispatchHandler());
                         }
                     });
             ChannelFuture future = server.bind(ServerConfig.getControlServerAddress(), ServerConfig.getControlServerPort()).sync();

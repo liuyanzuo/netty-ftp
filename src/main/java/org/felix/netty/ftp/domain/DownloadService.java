@@ -2,18 +2,11 @@ package org.felix.netty.ftp.domain;
 
 import io.netty.channel.ChannelHandlerContext;
 import org.felix.netty.ftp.inhandler.CommandDispatchHandler;
-import org.felix.netty.ftp.state.SessionStateMachine;
+import org.felix.netty.ftp.inhandler.InboundHandlerContext;
 import org.felix.netty.ftp.utils.CommandConstants;
 import org.felix.netty.ftp.utils.Tools;
 
-import java.io.RandomAccessFile;
 import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.Objects;
-
-import static org.felix.netty.ftp.utils.RetEnum.FILE_NOT_VALID;
-import static org.felix.netty.ftp.utils.RetEnum.IVALID_COMMAND;
 
 /**
  * key
@@ -30,7 +23,8 @@ public class DownloadService implements IFTPCommandService {
     }
 
     @Override
-    public void execute(FTPCommand ftpCommand, ChannelHandlerContext context) {
+    public void execute(ChannelHandlerContext context, InboundHandlerContext ftpContext) {
+        FTPCommand ftpCommand = ftpContext.getCommand();
         String filePath = ftpCommand.getParam();
         URL resource = Tools.getClassLoader().getResource(filePath);
         try {

@@ -24,7 +24,8 @@ public class CommandDispatchHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        FTPCommand ftpCommand = (FTPCommand) msg;
-        bizThreadPool.submit(() -> serviceTable.get(ftpCommand.getCommand()).execute(ftpCommand, ctx));
+        InboundHandlerContext ftpContext = (InboundHandlerContext) msg;
+        String command = ftpContext.getCommand().getCommand();
+        bizThreadPool.submit(() -> serviceTable.get(command).execute(ctx,ftpContext));
     }
 }

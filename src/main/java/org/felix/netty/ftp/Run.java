@@ -1,6 +1,5 @@
 package org.felix.netty.ftp;
 
-import org.felix.netty.ftp.domain.UserPermissionService;
 import org.felix.netty.ftp.utils.ConfigTool;
 import org.felix.netty.ftp.utils.ServerConfig;
 import org.slf4j.Logger;
